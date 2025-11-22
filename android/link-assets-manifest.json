@@ -1,0 +1,81 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/dm-sans.ttf",
+      "sha1": "76c500a4e46a2ef4252e909109926e08272ac849"
+    },
+    {
+      "path": "assets/fonts/DMSans-Bold.ttf",
+      "sha1": "10e061ac7f01fd542e0c1956e89b12a272607f5d"
+    },
+    {
+      "path": "assets/fonts/DMSans-Light.ttf",
+      "sha1": "5c144a0909fca26b32c9d5a42cd85e18f7ca924f"
+    },
+    {
+      "path": "assets/fonts/fira-code.ttf",
+      "sha1": "80abed4c40b3a19ba2def87e7fd66fba9bb40c2f"
+    },
+    {
+      "path": "assets/fonts/FiraCode-Bold.ttf",
+      "sha1": "c69ffea0fc3ef8cba6c72e31ff9db8a36dc9c857"
+    },
+    {
+      "path": "assets/fonts/FiraCode-Light.ttf",
+      "sha1": "4ebade19d676d4fd2ba4a5bea84b7f5f1fb7613f"
+    },
+    {
+      "path": "assets/fonts/lato.ttf",
+      "sha1": "e923c72eda5e50a87e18ff5c71e9ef4b3b6455a3"
+    },
+    {
+      "path": "assets/fonts/OpenSans-Bold.ttf",
+      "sha1": "c7e6b913f990299fcc5928f4581727972e869727"
+    },
+    {
+      "path": "assets/fonts/OpenSans-Light.ttf",
+      "sha1": "6236023a78c3031a26e7093881cceeae50ad036f"
+    },
+    {
+      "path": "assets/fonts/OpenSans-Regular.ttf",
+      "sha1": "576aa669c4ceb3830fde859a4db52916def172af"
+    },
+    {
+      "path": "assets/fonts/Quicksand-Bold.ttf",
+      "sha1": "111e880f4de54ccf0a7fd14f38999b9c066e46bb"
+    },
+    {
+      "path": "assets/fonts/quicksand-light.ttf",
+      "sha1": "42233ea07c570e0e880fcaa792922627814ecdc7"
+    },
+    {
+      "path": "assets/fonts/Quicksand-Medium.ttf",
+      "sha1": "04b8198132a4a092b10d0631500268d6a2a0f889"
+    },
+    {
+      "path": "assets/fonts/Quicksand-Regular.ttf",
+      "sha1": "61504eaec812663121918199aac7d960229bd306"
+    },
+    {
+      "path": "assets/fonts/Roboto-Bold.ttf",
+      "sha1": "783de2321d7e6d21f880a10437a9f2c7b45ed198"
+    },
+    {
+      "path": "assets/fonts/Roboto-Light.ttf",
+      "sha1": "318b44c0a32848f78bf11d4fbf3355d00647a796"
+    },
+    {
+      "path": "assets/fonts/Roboto-Regular.ttf",
+      "sha1": "3bff51436aa7eb995d84cfc592cc63e1316bb400"
+    },
+    {
+      "path": "assets/fonts/Tinos-Bold.ttf",
+      "sha1": "64455f4b98381db03451edc117ae28192a1fd487"
+    },
+    {
+      "path": "assets/fonts/Tinos-Regular.ttf",
+      "sha1": "7986131e326593c805a13f9b0087fa52ae5f9c39"
+    }
+  ]
+}
