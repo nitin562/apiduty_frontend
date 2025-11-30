@@ -1,9 +1,7 @@
 import { ServerUrlsV1 } from "../config";
-import { showGlobalModal } from "../utilities/ModalView";
 import { request } from "../utilities/request";
 
 export async function loginHelper(email, password){
-    showGlobalModal("Hey Global")
     const url = ServerUrlsV1.login
     const payload = JSON.stringify({
         email, password
@@ -19,7 +17,6 @@ export async function loginHelper(email, password){
 }
 
 export async function RegisterHelper(username, email, password){
-    showGlobalModal("Hey Global")
     const url = ServerUrlsV1.register
     const payload = JSON.stringify({
         email, password, username

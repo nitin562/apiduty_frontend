@@ -38,6 +38,7 @@ export default class ErrorHandler{
     }
 
     setValueErrorCodes(codeWithName, codeWithMessage={}){
+        // codeWithName = {code: name} codeWithMessage = {code: customMessage}
         if(!codeWithName){
             throw new Error("No Codes Provided")
         }
@@ -68,6 +69,7 @@ export default class ErrorHandler{
         }
 
         if(code in this.modalErrorDetail){
+            showGlobalModal(message)
             console.error(this.modalErrorDetail[code] || message)
         }
 

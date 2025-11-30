@@ -1,56 +1,58 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Animated, ScrollView, Text, TouchableOpacity, View } from "react-native"
+import { ActivityIndicator, Animated, ScrollView, Text, TouchableOpacity, View } from "react-native"
+import Ionicons from "@react-native-vector-icons/ionicons"
 
 import { DashboardTheme } from "../theme.js"
 import Input1 from "../utilities_jsx/InputFields/Input1.jsx"
 import OptionField from "../utilities_jsx/InputFields/OptionField.jsx"
-import SlideInput from "../utilities_jsx/SlideUpInput.jsx"
-
-import Ionicons from "@react-native-vector-icons/ionicons"
 import SubHeading from "../utilities_jsx/SubHeading.jsx"
+import { wrapWithLoader } from "../utilities/wrapper.js"
+import { handleStep1 } from "../api/service.js"
 
 export default function NewService() {
   const theme = DashboardTheme
   const [step, setStep] = useState(1)
-  const [data, setData] = useState({})
+  const [Loading, setLoading] = useState(false)
+  const [data, setData] = useState({
+    serviceState: "ON",
+    serviceStatus: "NORMAL"
+  })
   const [errors, setErrors] = useState({})
 
-  const handleStep = (value) => {
-    return () => {
-      return setStep((step) => {
-        return step + value
+  const handleSteps = wrapWithLoader(async () => {
+    let nextStep = false
+    if (step === 1) {
+      nextStep = await handleStep1(data, setErrors)
+    }
+
+    if (nextStep) {
+      setStep((step) => {
+        return step + 1
       })
     }
-  }
+  }, setLoading)
   return (
     <View className="flex-1 p-4" style={{
       backgroundColor: theme.surfaceCard
     }} >
       <View className="gap-5">
         <SubHeading title="Add Service" />
-        <ProgessBar step={step} last={2} />
+        <ProgessBar step={step} last={2} loading={Loading} />
       </View>
-      <View className="w-full flex-1">
+      <View className="w-full flex-1 mt-4">
         {step === 1 && <Step1 data={data} setData={setData} errors={errors} />}
       </View>
 
-      <View className="flex-row items-center" style={{
-        justifyContent: step > 1 ? "space-between" : "flex-end"
-      }}>
-        {step > 1 && <TouchableOpacity className="p-2 bg-red-400" onPress={handleStep(-1)}>
-          <Text className="text-md text-white" style={{ fontFamily: theme.font }}>
-            Back
-          </Text>
-        </TouchableOpacity>}
-
-        {step < 1 && <TouchableOpacity className="p-2 bg-emerald-400" onPress={handleStep(1)}>
-          <Text className="text-md text-white" style={{ fontFamily: theme.font }}>
+      {/* eslint-disable-next-line react-native/no-inline-styles */}
+      <View className="flex-row items-center flex-end">
+        {step <= 1 && step != 2 && <TouchableOpacity className="p-2 px-4 rounded-lg bg-blue-700" onPress={handleSteps}>
+          <Text className="text-xl text-white" style={{ fontFamily: theme.font }}>
             Next
           </Text>
         </TouchableOpacity>}
 
-        {step === 1 && <TouchableOpacity className="p-2 bg-blue-400">
-          <Text className="text-md text-white" style={{ fontFamily: theme.font }}>
+        {step === 2 && <TouchableOpacity onPress={handleSteps} className="p-2 px-4 rounded-lg bg-purple-500">
+          <Text className="text-xl text-white" style={{ fontFamily: theme.font }}>
             Submit
           </Text>
         </TouchableOpacity>}
@@ -61,7 +63,7 @@ export default function NewService() {
 }
 
 
-function ProgessBar({ step, last }) {
+function ProgessBar({ step, last.loading }) {
   const theme = DashboardTheme
   const progressValue = useRef(new Animated.Value(0)).current
 
@@ -72,6 +74,7 @@ function ProgessBar({ step, last }) {
       duration: 500,
       useNativeDriver: false
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step])
 
   const progressWidth = progressValue.interpolate({
@@ -92,9 +95,10 @@ function ProgessBar({ step, last }) {
       }} />
 
       <View className="w-full flex-row justify-between">
-        {Array(last).map((_, index) => {
-          const active = step >= index
-          const completed = step > index
+        {Array.from({ length: last }).map((_, index) => {
+          const active = step >= index + 1
+          const current = step == index + 1
+          const completed = step > index + 1
           return (
             <View key={index} className="w-10 items-center">
               {/* Step Circle */}
@@ -111,19 +115,20 @@ function ProgessBar({ step, last }) {
               >
                 {completed ? (
                   <Ionicons name="checkmark" size={20} color="#fff" />
-                ) : (
-                  <Text
-                    className="font-semibold"
-                    style={{
-                      color: active
-                        ? theme.textPrimary
-                        : theme.textSecondary,
-                      fontFamily: theme.fontBold2,
-                    }}
-                  >
-                    {index + 1}
-                  </Text>
-                )}
+                ) : ((current && loading) ? (
+                  <ActivityIndicator color={theme.textPrimary} />
+                ) : (<Text
+                  className="font-semibold"
+                  style={{
+                    color: active
+                      ? theme.textPrimary
+                      : theme.textSecondary,
+                    fontFamily: theme.fontBold2,
+                  }}
+                >
+                  {index + 1}
+                </Text>
+                ))}
               </View>
             </View>
           )
@@ -136,6 +141,7 @@ function ProgessBar({ step, last }) {
 }
 
 function Step1({ data, setData, errors }) {
+  const theme = DashboardTheme
   const STATUS_MAP = [
     { name: "CRITICAL", value: "Critical" },
     { name: "HIGH", value: "High" },
@@ -155,72 +161,28 @@ function Step1({ data, setData, errors }) {
     setValue: () => { }
   })
   const [showOptions, setshowOptions] = useState(false)
-  const handleOptionFieldClick = (name) => {
-    if (showOptions) {
-      return
-    }
-
-    const props = {}
-    props.field = name
-    props.currentSelection = data[name] || ""
-    props.setValue = changeValue
-    if (name === "Status") {
-      props.list = STATUS_MAP
-    }
-    else {
-      props.list = STATE_MAP
-    }
-
-    setOptionProps(props)
-    setshowOptions(true)
-  }
   const changeValue = (field, value) => {
     setData((prev) => {
-      const copy = prev
+      const copy = { ...prev }
       copy[field] = value
       return copy
     })
   }
   return (
     <View className="flex-1 w-full gap-4">
+      <Text className="w-full text-[#b194f5] text-md" style={{
+        fontFamily: theme.font
+      }}>Add Details</Text>
       <Input1 field="serviceName" name="Name" value={data?.serviceName || ""}
         placeholder="Enter Service Name" setValue={changeValue} errors={errors}
       />
       <Input1 field="serviceDescription" name="Description" value={data?.serviceDescription || ""}
         placeholder="Enter Service Description" setValue={changeValue} errors={errors}
       />
-      <OptionField name="Status" value={data.serviceStatus} handleClick={handleOptionFieldClick} />
-      <OptionField name="State" value={data.serviceState} handleClick={handleOptionFieldClick} />
-      <SlideInput component={<Options {...optionProps} />} setShow={setshowOptions} show={showOptions} theme={DashboardTheme} />
+      <OptionField name="Status" field="serviceStatus" value={data.serviceStatus} setValue={changeValue} list={STATUS_MAP} />
+      <OptionField name="State" field="serviceState" value={data.serviceState} setValue={changeValue} list={STATE_MAP} />
+      {/* {showOptions&&<SlideInput component={<Options {...optionProps} />} setShow={setshowOptions} show={showOptions} theme={DashboardTheme} />} */}
     </View>
-  )
-}
-
-function Options({ list, field, setValue, currentSelection = "" }) {
-  const [checked, setChecked] = useState(currentSelection)
-  const theme = DashboardTheme
-
-  const onPress = (selectedNameValue) => {
-    return () => {
-      setValue(field, selectedNameValue)
-      setChecked(selectedNameValue)
-    }
-  }
-  return (
-    <ScrollView className="w-full flex-1 gap-4">
-      {list.map((item) => {
-        const { name: key, value: displayText } = item
-        return (
-          <TouchableOpacity onPress={onPress(key)} key={key} className="w-full flex-row justify-between items-center p-1">
-            <Text className="text-lg" style={{
-              fontFamily: theme.font,
-              color: theme.textPrimary
-            }}>{displayText}</Text>
-            <Ionicons name={checked === key ? "radio-button-off-outline" : "radio-button-on-outline"} size={24} />
-          </TouchableOpacity>
-        )
-      })}
-    </ScrollView>
   )
 }
 

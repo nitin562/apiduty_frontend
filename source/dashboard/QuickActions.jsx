@@ -86,7 +86,7 @@ function Action({ name, color, icon, theme, stack, screen }) {
           className="text-base"
           style={{ fontFamily: theme.font, color: theme.textPrimary }}
         >
-          {{name}}
+          {name}
         </Text>
       </View>
       <Ionicons name="chevron-forward-outline" size={20} color={theme.textSecondary} />

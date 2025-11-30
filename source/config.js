@@ -4,4 +4,7 @@ export class ServerUrlsV1{
     static register = `${this.base}/user/register`
     static extendSession = `${this.base}/user/extend-session`
     static ping = `${this.base}/user/ping`
+
+    static addService = `${this.base}/services/service`
+    static addLogoToService = `${this.base}/services/service/add-logo`
 }

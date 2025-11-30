@@ -9,18 +9,17 @@ export default function Input1({name, field, value, setValue, errors, placeholde
     setValue(field, text)
   }
   return (
-    <View className="p-2 gap-3 rounded-xl" style={{
-      backgroundColor: theme.surfaceCard
-    }}>
-      <Text className="text-sm" style={{
+    <View className="p-2 gap-1 rounded-xl">
+      <Text className="text-sm ml-1" style={{
         fontFamily: theme.font,
-        color: theme.textPrimary
+        color: theme.accentSparkline
       }}>{name}</Text>
-      <TextInput className="text-md rounded-xl bg-transparent border-white" placeholderTextColor={theme.textSecondary} 
+      <TextInput className="text-md rounded-md px-2" placeholderTextColor={theme.textSecondary} 
         value={value} placeholder={placeholder}
         style={{
           fontFamily: theme.font,
-          color: theme.textPrimary
+          color: theme.textPrimary,
+          backgroundColor: theme.surfaceSecondary
         }}
         onChangeText={handleChange}
       />
